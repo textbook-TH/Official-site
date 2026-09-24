@@ -3,156 +3,76 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ADMIN PANEL - TEXTBOOK PLATFORM</title>
+  <title>TEXTBOOK PLATFORM</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800;900&family=Sarabun:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Plus Jakarta Sans', 'Sarabun', sans-serif; background-color: #ECECEC; color: #000000; }
     .card-shadow { box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
+    .hero-svg-title { width: 100%; height: auto; display: block; }
   </style>
 </head>
-<body class="min-h-screen p-4 md:p-8 flex items-center justify-center">
+<body class="min-h-screen flex flex-col justify-between p-2 md:p-6">
 
-  <!-- LOGIN BOX -->
-  <div id="login-box" class="max-w-md w-full bg-white p-8 rounded-3xl card-shadow border border-gray-100 space-y-6">
-    <div class="text-center">
-      <h1 class="text-2xl font-black uppercase text-black">ADMIN LOGIN</h1>
-      <p class="text-xs text-gray-400 mt-1 uppercase tracking-widest">ระบบจัดการแผงควบคุม TEXTBOOK.TH</p>
-    </div>
-    <div class="space-y-4">
-      <div>
-        <label class="block text-xs font-bold uppercase text-gray-600 mb-1">Email</label>
-        <input type="email" id="login-email" placeholder="admin@example.com" class="w-full px-4 py-3 bg-[#F9F9F9] border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black">
-      </div>
-      <div>
-        <label class="block text-xs font-bold uppercase text-gray-600 mb-1">Password</label>
-        <input type="password" id="login-password" placeholder="••••••••" class="w-full px-4 py-3 bg-[#F9F9F9] border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black">
-      </div>
-      <button onclick="handleLogin()" class="w-full py-3 bg-black text-white rounded-xl text-xs font-bold tracking-widest uppercase hover:bg-gray-800 transition">
-        เข้าสู่ระบบ
-      </button>
-      <p id="login-error" class="text-xs text-red-500 text-center font-bold hidden"></p>
-    </div>
-  </div>
-
-  <!-- ADMIN DASHBOARD PANEL -->
-  <div id="admin-dashboard" class="max-w-5xl w-full mx-auto hidden space-y-8 my-6">
+  <div class="max-w-[1400px] w-full mx-auto bg-[#F7F7F7] rounded-[32px] overflow-hidden shadow-2xl border border-white/80 flex flex-col justify-between">
     
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-6 rounded-3xl card-shadow border border-gray-100 gap-4">
-      <div>
-        <span class="text-xs font-bold tracking-widest text-emerald-600 uppercase">● Admin Authenticated</span>
-        <h1 class="text-2xl font-black uppercase text-black mt-1">แผงจัดการและอัปเดตข้อมูลหน้าหลัก</h1>
+    <!-- Navigation Bar -->
+    <nav class="px-6 md:px-10 py-6 flex items-center justify-between border-b border-gray-200/50">
+      <div id="nav-logo" class="flex items-center gap-3">
+        <img id="nav-logo-img" src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="Logo" class="w-8 h-8 md:w-9 md:h-9 object-contain rounded-lg"/>
+        <span id="nav-logo-text" class="font-black text-lg md:text-xl tracking-wider text-black">TEXTBOOK.TH</span>
       </div>
-      <div class="flex items-center gap-3">
-        <a href="index.html" target="_blank" class="px-5 py-3 border border-gray-300 rounded-full text-xs font-bold tracking-wider uppercase hover:bg-black hover:text-white transition">👁️ ดูหน้าเว็บจริง</a>
-        <button onclick="saveAdminChanges()" class="px-6 py-3 bg-black text-white rounded-full text-xs font-bold tracking-widest uppercase hover:bg-gray-800 transition shadow-lg">
-          💾 บันทึกลง Supabase
-        </button>
-        <button onclick="handleLogout()" class="px-4 py-3 border border-red-200 text-red-500 rounded-full text-xs font-bold hover:bg-red-50 transition">
-          ออกจากระบบ
-        </button>
-      </div>
+      
+      <div id="nav-dynamic-links" class="hidden md:flex items-center gap-8 text-xs font-bold tracking-widest uppercase text-gray-500"></div>
+    </nav>
+
+    <!-- Public Page Content -->
+    <div id="public-page" class="space-y-12 md:space-y-16 pb-12">
+      <!-- HERO SECTION -->
+      <section class="relative pt-16 md:pt-28 pb-6 px-3 md:px-8 flex flex-col items-center justify-center overflow-hidden">
+        <div class="w-full">
+          <svg class="hero-svg-title" viewBox="0 0 1000 128" preserveAspectRatio="none">
+            <text id="hero-big-text-svg" x="50%" y="108" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="900" font-size="142" fill="#000000" letter-spacing="-3">TEXTBOOK</text>
+          </svg>
+        </div>
+        <p id="hero-subtext" class="text-[10px] md:text-[11px] uppercase tracking-[0.35em] font-bold text-gray-400 text-center my-3 md:my-2"></p>
+        <div class="relative w-full max-w-xl mx-auto z-10 my-2">
+          <img id="hero-img" src="" alt="Hero" class="w-56 h-56 md:w-[360px] md:h-[360px] object-cover mx-auto rounded-full shadow-2xl border-4 border-white/90"/>
+        </div>
+        <div class="w-full text-center mt-6 z-10 px-4 space-y-2 overflow-x-auto">
+          <p id="hero-bottom-title" class="text-xs font-bold uppercase tracking-[0.25em] text-gray-800"></p>
+          <p id="hero-desc-left" class="text-xs text-gray-500 font-normal leading-relaxed whitespace-nowrap inline-block"></p>
+        </div>
+      </section>
+
+      <!-- ABOUT SECTION -->
+      <section class="px-6 md:px-16 max-w-5xl mx-auto pt-8 pb-4 border-t border-gray-200/60">
+        <div class="text-center mb-6">
+          <h2 id="about-title" class="text-xl md:text-2xl font-black uppercase tracking-wider text-black"></h2>
+          <p id="about-subtitle" class="text-[11px] tracking-widest text-gray-400 uppercase mt-0.5 font-semibold"></p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 text-xs text-gray-600 leading-relaxed font-normal">
+          <p id="about-text-1"></p>
+          <p id="about-text-2"></p>
+        </div>
+      </section>
+
+      <!-- SYSTEM COLLECTION -->
+      <section class="px-6 md:px-12 max-w-6xl mx-auto pt-4 pb-6">
+        <div class="text-center mb-8 border-b border-gray-200/60 pb-6">
+          <h2 id="system-title" class="text-xl md:text-2xl font-black uppercase tracking-tight text-black"></h2>
+          <p id="system-subtitle" class="text-[11px] font-semibold text-gray-400 tracking-widest uppercase mt-1"></p>
+        </div>
+        <div id="cards-container" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+      </section>
     </div>
 
-    <!-- หัวข้อ 1: โลโก้ & Nav Links -->
-    <div class="bg-white p-6 md:p-8 rounded-3xl card-shadow border border-gray-100 space-y-6">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <div class="flex items-center gap-2">
-          <span class="px-3 py-1 bg-black text-white rounded-xl font-bold text-xs">หัวข้อ 1</span>
-          <h2 class="text-sm font-bold uppercase tracking-wider text-black">โลโก้ & ลิงก์เมนูบาร์</h2>
-        </div>
-        <button onclick="addNavMenu()" class="px-4 py-2 bg-black text-white rounded-xl text-xs font-bold tracking-wider hover:bg-gray-800 transition">+ เพิ่มเมนูใหม่</button>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-[#F9F9F9] p-4 rounded-2xl border border-gray-200">
-        <div>
-          <label class="block text-xs font-bold uppercase text-gray-600 mb-1">🖼️ ลิงก์รูปโลโก้ (Logo URL / Drive Link)</label>
-          <input type="text" id="admin-logo-url" class="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-xs font-bold">
-        </div>
-        <div>
-          <label class="block text-xs font-bold uppercase text-gray-600 mb-1">ข้อความชื่อแบรนด์ (Brand Text)</label>
-          <input type="text" id="admin-logo-text" class="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-xs font-bold">
-        </div>
-      </div>
-      <div id="admin-nav-menu-list" class="space-y-3 pt-2"></div>
-    </div>
-
-    <!-- หัวข้อ 2: Hero Header -->
-    <div class="bg-white p-6 md:p-8 rounded-3xl card-shadow border border-gray-100 space-y-6">
-      <div class="flex items-center gap-2 border-b border-gray-100 pb-3">
-        <span class="px-3 py-1 bg-black text-white rounded-xl font-bold text-xs">หัวข้อ 2</span>
-        <h2 class="text-sm font-bold uppercase tracking-wider text-black">Hero Header (ส่วนบนสุด)</h2>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label class="block text-xs font-bold uppercase text-gray-600 mb-2">ข้อความชื่อใหญ่ (Big Title Text)</label>
-          <input type="text" id="admin-big-title" class="w-full px-4 py-3 bg-[#F9F9F9] border border-gray-200 rounded-xl text-sm font-bold">
-        </div>
-        <div>
-          <label class="block text-xs font-bold uppercase text-gray-600 mb-2">คำบรรยายสั้นใต้ชื่อใหญ่ (Subtext)</label>
-          <input type="text" id="admin-subtext" class="w-full px-4 py-3 bg-[#F9F9F9] border border-gray-200 rounded-xl text-sm">
-        </div>
-      </div>
-      <div>
-        <label class="block text-xs font-bold uppercase text-gray-600 mb-2">🔗 ลิงก์รูปภาพตรงกลาง (Google Drive / Direct Image URL)</label>
-        <input type="text" id="admin-img-url" class="w-full px-4 py-3 bg-[#F9F9F9] border border-gray-200 rounded-xl text-sm">
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label class="block text-xs font-bold uppercase text-gray-600 mb-2">หัวข้อสั้นด้านล่างรูปภาพ</label>
-          <input type="text" id="admin-bottom-title" class="w-full px-4 py-3 bg-[#F9F9F9] border border-gray-200 rounded-xl text-sm font-bold">
-        </div>
-        <div>
-          <label class="block text-xs font-bold uppercase text-gray-600 mb-2">คำอธิบายใต้รูปภาพ</label>
-          <textarea id="admin-desc-left" rows="2" class="w-full px-4 py-3 bg-[#F9F9F9] border border-gray-200 rounded-xl text-sm"></textarea>
-        </div>
-      </div>
-    </div>
-
-    <!-- หัวข้อ 3: ABOUT -->
-    <div class="bg-white p-6 md:p-8 rounded-3xl card-shadow border border-gray-100 space-y-6">
-      <div class="flex items-center gap-2 border-b border-gray-100 pb-3">
-        <span class="px-3 py-1 bg-black text-white rounded-xl font-bold text-xs">หัวข้อ 3</span>
-        <h2 class="text-sm font-bold uppercase tracking-wider text-black">ABOUT THE PLATFORM</h2>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input type="text" id="admin-about-title" placeholder="Main Title" class="px-4 py-3 bg-[#F9F9F9] rounded-xl text-sm font-bold border">
-        <input type="text" id="admin-about-subtitle" placeholder="Subtitle" class="px-4 py-3 bg-[#F9F9F9] rounded-xl text-sm font-bold border">
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <textarea id="admin-about-1" rows="4" placeholder="Left Text" class="px-4 py-3 bg-[#F9F9F9] rounded-xl text-sm border"></textarea>
-        <textarea id="admin-about-2" rows="4" placeholder="Right Text" class="px-4 py-3 bg-[#F9F9F9] rounded-xl text-sm border"></textarea>
-      </div>
-    </div>
-
-    <!-- หัวข้อ 4: SYSTEM COLLECTION -->
-    <div class="bg-white p-6 md:p-8 rounded-3xl card-shadow border border-gray-100 space-y-6">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <div class="flex items-center gap-2">
-          <span class="px-3 py-1 bg-black text-white rounded-xl font-bold text-xs">หัวข้อ 4</span>
-          <h2 class="text-sm font-bold uppercase tracking-wider text-black">SYSTEM COLLECTION</h2>
-        </div>
-        <button onclick="addNewCard()" class="px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold tracking-wider hover:bg-emerald-700 transition">+ เพิ่มการ์ดใหม่</button>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input type="text" id="admin-system-title" placeholder="System Title" class="px-4 py-3 bg-[#F9F9F9] rounded-xl text-sm font-bold border">
-        <input type="text" id="admin-system-subtitle" placeholder="System Subtitle" class="px-4 py-3 bg-[#F9F9F9] rounded-xl text-sm border">
-      </div>
-      <div id="admin-cards-list" class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2"></div>
-    </div>
-
-    <!-- หัวข้อ 5: FOOTER -->
-    <div class="bg-white p-6 md:p-8 rounded-3xl card-shadow border border-gray-100 space-y-6">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <div class="flex items-center gap-2">
-          <span class="px-3 py-1 bg-black text-white rounded-xl font-bold text-xs">หัวข้อ 5</span>
-          <h2 class="text-sm font-bold uppercase tracking-wider text-black">FOOTER</h2>
-        </div>
-        <button onclick="addFooterLink()" class="px-4 py-2 bg-black text-white rounded-xl text-xs font-bold tracking-wider hover:bg-gray-800 transition">+ เพิ่มลิงก์ Footer</button>
-      </div>
-      <input type="text" id="admin-footer-copyright" placeholder="Copyright Text" class="w-full px-4 py-3 bg-[#F9F9F9] rounded-xl text-sm border font-bold">
-      <div id="admin-footer-links-list" class="space-y-3 pt-2"></div>
-    </div>
+    <!-- Footer -->
+    <footer class="px-6 md:px-8 py-6 border-t border-gray-200/60 flex flex-col md:flex-row justify-between items-center text-[11px] font-medium text-gray-400 uppercase tracking-widest gap-4">
+      <div id="footer-copyright"></div>
+      <div id="footer-links-container" class="flex gap-6"></div>
+    </footer>
 
   </div>
 
@@ -162,169 +82,83 @@
     const SUPABASE_ANON_KEY = 'sb_publishable_TK-m_pMcUSnq9h2Lf1T3bQ_bUrSpd4H';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    let navMenuItems = [];
-    let systemCards = [];
-    let footerLinks = [];
-
-    async function checkAuth() {
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      if (session) {
-        document.getElementById('login-box').classList.add('hidden');
-        document.getElementById('admin-dashboard').classList.remove('hidden');
-        loadDataFromSupabase();
-      } else {
-        document.getElementById('login-box').classList.remove('hidden');
-        document.getElementById('admin-dashboard').classList.add('hidden');
+    function parseGoogleDriveUrl(url) {
+      if (!url) return '';
+      if (url.includes('drive.google.com')) {
+        const matches = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
+        if (matches && matches[1]) return `https://lh3.googleusercontent.com/d/${matches[1]}`;
       }
+      return url;
     }
 
-    async function handleLogin() {
-      const email = document.getElementById('login-email').value;
-      const password = document.getElementById('login-password').value;
-      const errorEl = document.getElementById('login-error');
-
-      const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
-      if (error) {
-        errorEl.innerText = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง!';
-        errorEl.classList.remove('hidden');
-      } else {
-        errorEl.classList.add('hidden');
-        checkAuth();
-      }
-    }
-
-    async function handleLogout() {
-      await supabaseClient.auth.signOut();
-      checkAuth();
-    }
-
+    // ดึงข้อมูลจาก Supabase มาแสดงผลบนหน้าเว็บ
     async function loadDataFromSupabase() {
-      const { data } = await supabaseClient.from('site_config').select('content').eq('id', 1).single();
-      if (!data || !data.content) return;
+      const { data, error } = await supabaseClient
+        .from('site_config')
+        .select('content')
+        .eq('id', 1)
+        .single();
+
+      if (error || !data) {
+        console.error('Error fetching data:', error);
+        return;
+      }
 
       const c = data.content;
-      document.getElementById('admin-logo-url').value = c.logoUrl || '';
-      document.getElementById('admin-logo-text').value = c.logoText || '';
-      document.getElementById('admin-big-title').value = c.heroBigTitle || '';
-      document.getElementById('admin-subtext').value = c.heroSubtext || '';
-      document.getElementById('admin-img-url').value = c.heroImgUrl || '';
-      document.getElementById('admin-bottom-title').value = c.heroBottomTitle || '';
-      document.getElementById('admin-desc-left').value = c.heroDescLeft || '';
 
-      document.getElementById('admin-about-title').value = c.aboutTitle || '';
-      document.getElementById('admin-about-subtitle').value = c.aboutSubtitle || '';
-      document.getElementById('admin-about-1').value = c.aboutText1 || '';
-      document.getElementById('admin-about-2').value = c.aboutText2 || '';
+      // 1. Header & Nav
+      if (c.logoUrl) document.getElementById('nav-logo-img').src = parseGoogleDriveUrl(c.logoUrl);
+      document.getElementById('nav-logo-text').innerText = c.logoText || 'TEXTBOOK.TH';
+      document.getElementById('nav-dynamic-links').innerHTML = (c.navMenuItems || []).map(item => 
+        `<a href="${item.url}" target="_blank" class="hover:text-black transition">${item.label}</a>`
+      ).join('');
 
-      document.getElementById('admin-system-title').value = c.systemTitle || '';
-      document.getElementById('admin-system-subtitle').value = c.systemSubtitle || '';
+      // 2. Hero Section
+      document.getElementById('hero-big-text-svg').textContent = c.heroBigTitle || 'TEXTBOOK';
+      document.getElementById('hero-subtext').innerText = c.heroSubtext || '';
+      document.getElementById('hero-bottom-title').innerText = c.heroBottomTitle || '';
+      document.getElementById('hero-desc-left').innerText = c.heroDescLeft || '';
+      if (c.heroImgUrl) document.getElementById('hero-img').src = parseGoogleDriveUrl(c.heroImgUrl);
 
-      document.getElementById('admin-footer-copyright').value = c.footerCopyright || '';
+      // 3. About Section
+      document.getElementById('about-title').innerText = c.aboutTitle || '';
+      document.getElementById('about-subtitle').innerText = c.aboutSubtitle || '';
+      document.getElementById('about-text-1').innerText = c.aboutText1 || '';
+      document.getElementById('about-text-2').innerText = c.aboutText2 || '';
 
-      navMenuItems = c.navMenuItems || [];
-      systemCards = c.systemCards || [];
-      footerLinks = c.footerLinks || [];
+      // 4. Cards Section
+      document.getElementById('system-title').innerText = c.systemTitle || '';
+      document.getElementById('system-subtitle').innerText = c.systemSubtitle || '';
+      document.getElementById('cards-container').innerHTML = (c.systemCards || []).map(card => {
+        const parsedImg = parseGoogleDriveUrl(card.imageUrl);
+        const imageContent = parsedImg 
+          ? `<img src="${parsedImg}" alt="${card.title}" class="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition duration-500"/>`
+          : `<span class="text-xl md:text-2xl font-black tracking-widest ${card.iconColor}">${card.iconText || 'SYSTEM'}</span>`;
 
-      renderAdminNavMenu();
-      renderAdminCards();
-      renderAdminFooterLinks();
-    }
-
-    function renderAdminNavMenu() {
-      document.getElementById('admin-nav-menu-list').innerHTML = navMenuItems.map((item, idx) => `
-        <div class="flex items-center gap-3 p-3 bg-[#F9F9F9] rounded-2xl border">
-          <input type="text" id="admin-nav-label-${idx}" value="${item.label}" class="w-1/3 p-2 bg-white rounded-xl text-xs font-bold border">
-          <input type="text" id="admin-nav-url-${idx}" value="${item.url}" class="w-2/3 p-2 bg-white rounded-xl text-xs border">
-          <button onclick="navMenuItems.splice(${idx},1); renderAdminNavMenu();" class="text-red-500 font-bold text-xs">✕ ลบ</button>
-        </div>
-      `).join('');
-    }
-
-    function addNavMenu() { navMenuItems.push({ label: "NEW MENU", url: "#" }); renderAdminNavMenu(); }
-
-    function renderAdminCards() {
-      document.getElementById('admin-cards-list').innerHTML = systemCards.map((card, idx) => `
-        <div class="p-4 bg-[#F9F9F9] rounded-2xl border space-y-2">
-          <div class="flex justify-between">
-            <span class="text-[10px] font-bold text-gray-400">Card #${idx + 1}</span>
-            <button onclick="systemCards.splice(${idx},1); renderAdminCards();" class="text-red-500 font-bold text-xs">✕ ลบ</button>
+        return `
+          <div class="bg-white rounded-3xl p-6 flex flex-col justify-between h-[390px] md:h-[420px] card-shadow border border-gray-100 group hover:-translate-y-1.5 transition duration-300">
+            <div>
+              <h3 class="text-xl font-bold uppercase tracking-tight text-black mt-1">${card.title}</h3>
+              <p class="text-xs text-gray-500 mt-2 leading-relaxed line-clamp-2">${card.desc}</p>
+            </div>
+            <div class="my-3 flex justify-center items-center h-32 md:h-36 bg-[#F9F9F9] rounded-2xl overflow-hidden border border-gray-100 relative">
+              ${imageContent}
+            </div>
+            <a href="${card.link}" target="_blank" class="w-full py-2.5 bg-black text-white rounded-full text-xs font-bold tracking-widest uppercase text-center hover:bg-gray-800 transition">
+              EXPLORE →
+            </a>
           </div>
-          <input type="text" id="admin-card-title-${idx}" value="${card.title}" class="w-full p-2 bg-white rounded-lg text-xs font-bold border" placeholder="ชื่อการ์ด">
-          <textarea id="admin-card-desc-${idx}" rows="2" class="w-full p-2 bg-white rounded-lg text-xs border" placeholder="คำอธิบาย">${card.desc}</textarea>
-          <input type="text" id="admin-card-img-${idx}" value="${card.imageUrl || ''}" class="w-full p-2 bg-white rounded-lg text-xs border" placeholder="ลิงก์รูป (Drive/URL)">
-          <input type="text" id="admin-card-icon-${idx}" value="${card.iconText || ''}" class="w-full p-2 bg-white rounded-lg text-xs border" placeholder="ข้อความแทนรูป">
-          <input type="text" id="admin-card-link-${idx}" value="${card.link}" class="w-full p-2 bg-white rounded-lg text-xs border" placeholder="ลิงก์ระบบ">
-        </div>
-      `).join('');
+        `;
+      }).join('');
+
+      // 5. Footer Section
+      document.getElementById('footer-copyright').innerText = c.footerCopyright || '';
+      document.getElementById('footer-links-container').innerHTML = (c.footerLinks || []).map(item => 
+        `<a href="${item.url}" target="_blank" class="hover:text-black transition">${item.label}</a>`
+      ).join('');
     }
 
-    function addNewCard() { systemCards.push({ title: "New System", desc: "", imageUrl: "", iconText: "SYS", link: "#" }); renderAdminCards(); }
-
-    function renderAdminFooterLinks() {
-      document.getElementById('admin-footer-links-list').innerHTML = footerLinks.map((item, idx) => `
-        <div class="flex items-center gap-3 p-3 bg-[#F9F9F9] rounded-2xl border">
-          <input type="text" id="admin-footer-label-${idx}" value="${item.label}" class="w-1/3 p-2 bg-white rounded-xl text-xs font-bold border">
-          <input type="text" id="admin-footer-url-${idx}" value="${item.url}" class="w-2/3 p-2 bg-white rounded-xl text-xs border">
-          <button onclick="footerLinks.splice(${idx},1); renderAdminFooterLinks();" class="text-red-500 font-bold text-xs">✕ ลบ</button>
-        </div>
-      `).join('');
-    }
-
-    function addFooterLink() { footerLinks.push({ label: "NEW LINK", url: "#" }); renderAdminFooterLinks(); }
-
-    // บันทึกข้อมูลกลับลง Supabase
-    async function saveAdminChanges() {
-      // ดึงข้อมูลจาก Input หน้าแอดมิน
-      navMenuItems.forEach((item, idx) => {
-        item.label = document.getElementById(`admin-nav-label-${idx}`).value;
-        item.url = document.getElementById(`admin-nav-url-${idx}`).value;
-      });
-
-      systemCards.forEach((card, idx) => {
-        card.title = document.getElementById(`admin-card-title-${idx}`).value;
-        card.desc = document.getElementById(`admin-card-desc-${idx}`).value;
-        card.imageUrl = document.getElementById(`admin-card-img-${idx}`).value;
-        card.iconText = document.getElementById(`admin-card-icon-${idx}`).value;
-        card.link = document.getElementById(`admin-card-link-${idx}`).value;
-      });
-
-      footerLinks.forEach((item, idx) => {
-        item.label = document.getElementById(`admin-footer-label-${idx}`).value;
-        item.url = document.getElementById(`admin-footer-url-${idx}`).value;
-      });
-
-      const updatedPayload = {
-        logoUrl: document.getElementById('admin-logo-url').value,
-        logoText: document.getElementById('admin-logo-text').value,
-        navMenuItems: navMenuItems,
-        heroBigTitle: document.getElementById('admin-big-title').value,
-        heroSubtext: document.getElementById('admin-subtext').value,
-        heroImgUrl: document.getElementById('admin-img-url').value,
-        heroBottomTitle: document.getElementById('admin-bottom-title').value,
-        heroDescLeft: document.getElementById('admin-desc-left').value,
-        aboutTitle: document.getElementById('admin-about-title').value,
-        aboutSubtitle: document.getElementById('admin-about-subtitle').value,
-        aboutText1: document.getElementById('admin-about-1').value,
-        aboutText2: document.getElementById('admin-about-2').value,
-        systemTitle: document.getElementById('admin-system-title').value,
-        systemSubtitle: document.getElementById('admin-system-subtitle').value,
-        systemCards: systemCards,
-        footerCopyright: document.getElementById('admin-footer-copyright').value,
-        footerLinks: footerLinks
-      };
-
-      const { error } = await supabaseClient
-        .from('site_config')
-        .upsert({ id: 1, content: updatedPayload });
-
-      if (error) {
-        alert('เกิดข้อผิดพลาดในการบันทึก: ' + error.message);
-      } else {
-        alert('✅ บันทึกข้อมูลลง Supabase สำเร็จ! หน้าเว็บหลักจะอัปเดตทันที');
-      }
-    }
-
-    checkAuth();
+    loadDataFromSupabase();
   </script>
 </body>
 </html>
