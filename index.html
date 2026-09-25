@@ -70,13 +70,11 @@
     </div>
 
     <!-- Footer -->
-    <footer class="px-6 md:px-8 py-6 border-t border-gray-200/60 flex flex-col xl:flex-row justify-center xl:justify-between items-center text-[11px] font-medium text-gray-400 uppercase tracking-widest gap-4">
-      <!-- ข้อความ Copyright: แนวตั้งอยู่แถวเดียวกัน / แนวนอนจัดตรงกลาง / จอใหญ่จัดซ้ายตามเดิม -->
+    <footer id="main-footer" class="px-6 md:px-8 py-6 border-t border-gray-200/60 flex flex-col xl:flex-row justify-center xl:justify-between items-center text-[11px] font-medium text-gray-400 uppercase tracking-widest gap-4">
       <div id="footer-copyright" class="text-center leading-relaxed whitespace-nowrap overflow-x-auto w-full xl:w-auto xl:text-left">
         <span class="inline">© 2026 งานเทคโนโลยีการศึกษา คณะวิศวกรรมศาสตร์</span>
         <span class="inline ml-1">สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง</span>
       </div>
-      <!-- ซ่อนลิงก์เฉพาะในมือถือและ iPad ทั้งแนวตั้งและแนวนอน (แสดงเฉพาะจอใหญ่ xl ขึ้นไป) -->
       <div id="footer-links-container" class="hidden xl:flex gap-6"></div>
     </footer>
 
@@ -181,7 +179,25 @@
           <span class="inline ml-1">สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง</span>
         `;
       }
-      document.getElementById('footer-links-container').innerHTML = (c.footerLinks || []).map(item => 
+
+      const footerLinks = c.footerLinks || [];
+      const mainFooter = document.getElementById('main-footer');
+      const copyrightElem = document.getElementById('footer-copyright');
+
+      // ตรวจสอบและปรับให้จัดกลางอัตโนมัติหากไม่มีเมนู Footer ใน PC
+      if (footerLinks.length === 0) {
+        mainFooter.classList.remove('xl:justify-between');
+        mainFooter.classList.add('xl:justify-center');
+        copyrightElem.classList.remove('xl:text-left', 'xl:w-auto');
+        copyrightElem.classList.add('xl:text-center', 'xl:w-full');
+      } else {
+        mainFooter.classList.remove('xl:justify-center');
+        mainFooter.classList.add('xl:justify-between');
+        copyrightElem.classList.remove('xl:text-center', 'xl:w-full');
+        copyrightElem.classList.add('xl:text-left', 'xl:w-auto');
+      }
+
+      document.getElementById('footer-links-container').innerHTML = footerLinks.map(item => 
         `<a href="${item.url}" target="_blank" class="flex items-center gap-1.5 hover:text-black transition">
           ${getAutoIconSvg(item.label)}
           <span>${item.label}</span>
