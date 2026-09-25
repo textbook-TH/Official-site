@@ -182,7 +182,10 @@
         `;
       }
       document.getElementById('footer-links-container').innerHTML = (c.footerLinks || []).map(item => 
-        `<a href="${item.url}" target="_blank" class="hover:text-black transition">${item.label}</a>`
+        `<a href="${item.url}" target="_blank" class="flex items-center gap-1.5 hover:text-black transition">
+          ${getAutoIconSvg(item.label)}
+          <span>${item.label}</span>
+        </a>`
       ).join('');
     }
 
