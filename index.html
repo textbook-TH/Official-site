@@ -24,7 +24,8 @@
         <span id="nav-logo-text" class="font-black text-lg md:text-xl tracking-wider text-black">EDUCATION TECHNOLOGY</span>
       </div>
       
-      <div id="nav-dynamic-links" class="hidden md:flex items-center gap-8 text-xs font-bold tracking-widest uppercase text-gray-500"></div>
+      <!-- ซ่อนในหน้าจอขนาดเล็กและแนวตั้งของ iPad (แสดงเฉพาะ lg ขึ้นไป) -->
+      <div id="nav-dynamic-links" class="hidden lg:flex items-center gap-8 text-xs font-bold tracking-widest uppercase text-gray-500"></div>
     </nav>
 
     <!-- Public Page Content -->
@@ -69,9 +70,14 @@
     </div>
 
     <!-- Footer -->
-    <footer class="px-6 md:px-8 py-6 border-t border-gray-200/60 flex flex-col md:flex-row justify-between items-center text-[11px] font-medium text-gray-400 uppercase tracking-widest gap-4">
-      <div id="footer-copyright"></div>
-      <div id="footer-links-container" class="flex gap-6"></div>
+    <footer class="px-6 md:px-8 py-6 border-t border-gray-200/60 flex flex-col lg:flex-row justify-between items-center text-[11px] font-medium text-gray-400 uppercase tracking-widest gap-4">
+      <!-- แสดงผล 2 แถวในมือถือ/iPad แนวตั้ง และรวมเป็นบรรทัดเดียวในจอใหญ่ lg ขึ้นไป -->
+      <div id="footer-copyright" class="text-center lg:text-left leading-relaxed">
+        <span class="block lg:inline">© 2026 งานเทคโนโลยีการศึกษา คณะวิศวกรรมศาสตร์</span>
+        <span class="block lg:inline lg:ml-1">สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง</span>
+      </div>
+      <!-- ซ่อนลิงก์เฉพาะในมือถือและ iPad แนวตั้ง (แสดงเฉพาะ lg ขึ้นไป) -->
+      <div id="footer-links-container" class="hidden lg:flex gap-6"></div>
     </footer>
 
   </div>
@@ -169,7 +175,12 @@
       }).join('');
 
       // 5. Footer Section
-      document.getElementById('footer-copyright').innerText = c.footerCopyright || '';
+      if (c.footerCopyright) {
+        document.getElementById('footer-copyright').innerHTML = `
+          <span class="block lg:inline">${c.footerCopyright}</span>
+          <span class="block lg:inline lg:ml-1">สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง</span>
+        `;
+      }
       document.getElementById('footer-links-container').innerHTML = (c.footerLinks || []).map(item => 
         `<a href="${item.url}" target="_blank" class="hover:text-black transition">${item.label}</a>`
       ).join('');
