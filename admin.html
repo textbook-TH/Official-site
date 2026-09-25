@@ -133,7 +133,7 @@
       <div id="admin-cards-list" class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2"></div>
     </div>
 
-    <!-- หัวข้อ 5: FOOTER -->
+    <!-- หัวข้อ 5: FOOTER (นำช่อง Copyright Text ออกตามสั่งแล้ว) -->
     <div class="bg-white p-6 md:p-8 rounded-3xl card-shadow border border-gray-100 space-y-6">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
         <div class="flex items-center gap-2">
@@ -142,7 +142,6 @@
         </div>
         <button onclick="addFooterLink()" class="px-4 py-2 bg-black text-white rounded-xl text-xs font-bold tracking-wider hover:bg-gray-800 transition">+ เพิ่มลิงก์ Footer</button>
       </div>
-      <input type="text" id="admin-footer-copyright" placeholder="Copyright Text" class="w-full px-4 py-3 bg-[#F9F9F9] rounded-xl text-sm border font-bold">
       <div id="admin-footer-links-list" class="space-y-3 pt-2"></div>
     </div>
 
@@ -165,7 +164,7 @@
   </div>
 
   <script>
-    // 🔗 ตั้งค่า Supabase Credentials (ปิดการจำ Session เพื่อให้หลุดออกจากระบบเมื่อกด F5 หรือปิดเบราว์เซอร์)
+    // 🔗 ตั้งค่า Supabase Credentials
     const SUPABASE_URL = 'https://dvzzpuorytdvdawolken.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_TK-m_pMcUSnq9h2Lf1T3bQ_bUrSpd4H';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
@@ -174,7 +173,6 @@
       }
     });
 
-    // ล้างข้อมูล Session ออกทันทีเมื่อผู้ใช้กด F5, เปลี่ยนหน้า หรือปิดเบราว์เซอร์
     window.addEventListener('beforeunload', () => {
       supabaseClient.auth.signOut();
     });
@@ -183,7 +181,6 @@
     let systemCards = [];
     let footerLinks = [];
 
-    // ฟังก์ชันเปิด-ปิด Custom Popup Modal
     function showAlertModal(title, message, isSuccess = true) {
       const modal = document.getElementById('custom-alert-modal');
       const iconBg = document.getElementById('modal-icon-bg');
@@ -262,8 +259,6 @@
       document.getElementById('admin-system-title').value = c.systemTitle || '';
       document.getElementById('admin-system-subtitle').value = c.systemSubtitle || '';
 
-      document.getElementById('admin-footer-copyright').value = c.footerCopyright || '';
-
       navMenuItems = c.navMenuItems || [];
       systemCards = c.systemCards || [];
       footerLinks = c.footerLinks || [];
@@ -273,7 +268,6 @@
       renderAdminFooterLinks();
     }
 
-    // ฟังก์ชันอ่านค่าปัจจุบันจากหน้าจอลงในตัวแปร Array
     function syncNavMenuInputs() {
       navMenuItems.forEach((item, idx) => {
         const labelEl = document.getElementById(`admin-nav-label-${idx}`);
@@ -305,7 +299,6 @@
       renderAdminNavMenu();
     }
 
-    // ฟังก์ชันอ่านค่าการ์ดปัจจุบันลงตัวแปร Array
     function syncCardInputs() {
       systemCards.forEach((card, idx) => {
         const titleEl = document.getElementById(`admin-card-title-${idx}`);
@@ -349,7 +342,6 @@
       renderAdminCards();
     }
 
-    // ฟังก์ชันอ่านค่า Footer ลิงก์ปัจจุบันลงตัวแปร Array
     function syncFooterInputs() {
       footerLinks.forEach((item, idx) => {
         const labelEl = document.getElementById(`admin-footer-label-${idx}`);
@@ -381,7 +373,6 @@
       renderAdminFooterLinks();
     }
 
-    // บันทึกข้อมูลกลับลง Supabase
     async function saveAdminChanges() {
       syncNavMenuInputs();
       syncCardInputs();
@@ -403,7 +394,6 @@
         systemTitle: document.getElementById('admin-system-title').value,
         systemSubtitle: document.getElementById('admin-system-subtitle').value,
         systemCards: systemCards,
-        footerCopyright: document.getElementById('admin-footer-copyright').value,
         footerLinks: footerLinks
       };
 
