@@ -231,24 +231,60 @@
       renderAdminFooterLinks();
     }
 
+    // ฟังก์ชันอ่านค่าปัจจุบันจากหน้าจอลงในตัวแปร Array
+    function syncNavMenuInputs() {
+      navMenuItems.forEach((item, idx) => {
+        const labelEl = document.getElementById(`admin-nav-label-${idx}`);
+        const urlEl = document.getElementById(`admin-nav-url-${idx}`);
+        if (labelEl) item.label = labelEl.value;
+        if (urlEl) item.url = urlEl.value;
+      });
+    }
+
     function renderAdminNavMenu() {
       document.getElementById('admin-nav-menu-list').innerHTML = navMenuItems.map((item, idx) => `
         <div class="flex items-center gap-3 p-3 bg-[#F9F9F9] rounded-2xl border">
           <input type="text" id="admin-nav-label-${idx}" value="${item.label}" class="w-1/3 p-2 bg-white rounded-xl text-xs font-bold border">
           <input type="text" id="admin-nav-url-${idx}" value="${item.url}" class="w-2/3 p-2 bg-white rounded-xl text-xs border">
-          <button onclick="navMenuItems.splice(${idx},1); renderAdminNavMenu();" class="text-red-500 font-bold text-xs">✕ ลบ</button>
+          <button onclick="removeNavMenu(${idx})" class="text-red-500 font-bold text-xs">✕ ลบ</button>
         </div>
       `).join('');
     }
 
-    function addNavMenu() { navMenuItems.push({ label: "NEW MENU", url: "#" }); renderAdminNavMenu(); }
+    function addNavMenu() {
+      syncNavMenuInputs();
+      navMenuItems.push({ label: "NEW MENU", url: "#" });
+      renderAdminNavMenu();
+    }
+
+    function removeNavMenu(idx) {
+      syncNavMenuInputs();
+      navMenuItems.splice(idx, 1);
+      renderAdminNavMenu();
+    }
+
+    // ฟังก์ชันอ่านค่าการ์ดปัจจุบันลงตัวแปร Array
+    function syncCardInputs() {
+      systemCards.forEach((card, idx) => {
+        const titleEl = document.getElementById(`admin-card-title-${idx}`);
+        const descEl = document.getElementById(`admin-card-desc-${idx}`);
+        const imgEl = document.getElementById(`admin-card-img-${idx}`);
+        const iconEl = document.getElementById(`admin-card-icon-${idx}`);
+        const linkEl = document.getElementById(`admin-card-link-${idx}`);
+        if (titleEl) card.title = titleEl.value;
+        if (descEl) card.desc = descEl.value;
+        if (imgEl) card.imageUrl = imgEl.value;
+        if (iconEl) card.iconText = iconEl.value;
+        if (linkEl) card.link = linkEl.value;
+      });
+    }
 
     function renderAdminCards() {
       document.getElementById('admin-cards-list').innerHTML = systemCards.map((card, idx) => `
         <div class="p-4 bg-[#F9F9F9] rounded-2xl border space-y-2">
           <div class="flex justify-between">
             <span class="text-[10px] font-bold text-gray-400">Card #${idx + 1}</span>
-            <button onclick="systemCards.splice(${idx},1); renderAdminCards();" class="text-red-500 font-bold text-xs">✕ ลบ</button>
+            <button onclick="removeCard(${idx})" class="text-red-500 font-bold text-xs">✕ ลบ</button>
           </div>
           <input type="text" id="admin-card-title-${idx}" value="${card.title}" class="w-full p-2 bg-white rounded-lg text-xs font-bold border" placeholder="ชื่อการ์ด">
           <textarea id="admin-card-desc-${idx}" rows="2" class="w-full p-2 bg-white rounded-lg text-xs border" placeholder="คำอธิบาย">${card.desc}</textarea>
@@ -259,40 +295,55 @@
       `).join('');
     }
 
-    function addNewCard() { systemCards.push({ title: "New System", desc: "", imageUrl: "", iconText: "SYS", link: "" }); renderAdminCards(); }
+    function addNewCard() {
+      syncCardInputs();
+      systemCards.push({ title: "New System", desc: "", imageUrl: "", iconText: "SYS", link: "" });
+      renderAdminCards();
+    }
+
+    function removeCard(idx) {
+      syncCardInputs();
+      systemCards.splice(idx, 1);
+      renderAdminCards();
+    }
+
+    // ฟังก์ชันอ่านค่า Footer ลิงก์ปัจจุบันลงตัวแปร Array
+    function syncFooterInputs() {
+      footerLinks.forEach((item, idx) => {
+        const labelEl = document.getElementById(`admin-footer-label-${idx}`);
+        const urlEl = document.getElementById(`admin-footer-url-${idx}`);
+        if (labelEl) item.label = labelEl.value;
+        if (urlEl) item.url = urlEl.value;
+      });
+    }
 
     function renderAdminFooterLinks() {
       document.getElementById('admin-footer-links-list').innerHTML = footerLinks.map((item, idx) => `
         <div class="flex items-center gap-3 p-3 bg-[#F9F9F9] rounded-2xl border">
           <input type="text" id="admin-footer-label-${idx}" value="${item.label}" class="w-1/3 p-2 bg-white rounded-xl text-xs font-bold border">
           <input type="text" id="admin-footer-url-${idx}" value="${item.url}" class="w-2/3 p-2 bg-white rounded-xl text-xs border">
-          <button onclick="footerLinks.splice(${idx},1); renderAdminFooterLinks();" class="text-red-500 font-bold text-xs">✕ ลบ</button>
+          <button onclick="removeFooterLink(${idx})" class="text-red-500 font-bold text-xs">✕ ลบ</button>
         </div>
       `).join('');
     }
 
-    function addFooterLink() { footerLinks.push({ label: "NEW LINK", url: "#" }); renderAdminFooterLinks(); }
+    function addFooterLink() {
+      syncFooterInputs();
+      footerLinks.push({ label: "NEW LINK", url: "#" });
+      renderAdminFooterLinks();
+    }
+
+    function removeFooterLink(idx) {
+      syncFooterInputs();
+      footerLinks.splice(idx, 1);
+      renderAdminFooterLinks();
+    }
 
     // บันทึกข้อมูลกลับลง Supabase
     async function saveAdminChanges() {
-      // ดึงข้อมูลจาก Input หน้าแอดมิน
-      navMenuItems.forEach((item, idx) => {
-        item.label = document.getElementById(`admin-nav-label-${idx}`).value;
-        item.url = document.getElementById(`admin-nav-url-${idx}`).value;
-      });
-
-      systemCards.forEach((card, idx) => {
-        card.title = document.getElementById(`admin-card-title-${idx}`).value;
-        card.desc = document.getElementById(`admin-card-desc-${idx}`).value;
-        card.imageUrl = document.getElementById(`admin-card-img-${idx}`).value;
-        card.iconText = document.getElementById(`admin-card-icon-${idx}`).value;
-        card.link = document.getElementById(`admin-card-link-${idx}`).value;
-      });
-
-      footerLinks.forEach((item, idx) => {
-        item.label = document.getElementById(`admin-footer-label-${idx}`).value;
-        item.url = document.getElementById(`admin-footer-url-${idx}`).value;
-      });
+      syncNavMenuInputs();
+      syncCardInputs();
+      syncFooterInputs();
 
       const updatedPayload = {
         logoUrl: document.getElementById('admin-logo-url').value,
