@@ -148,6 +148,22 @@
 
   </div>
 
+  <!-- CUSTOM SUCCESS/ERROR POPUP MODAL -->
+  <div id="custom-alert-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+    <div class="bg-white max-w-sm w-full rounded-3xl p-6 text-center space-y-4 shadow-2xl border border-gray-100 transform transition-all">
+      <div id="modal-icon-bg" class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto text-2xl font-black">
+        <span id="modal-icon">✓</span>
+      </div>
+      <div>
+        <h3 id="modal-title" class="text-lg font-black text-black">บันทึกข้อมูลสำเร็จ</h3>
+        <p id="modal-message" class="text-xs text-gray-500 mt-1 leading-relaxed">ข้อมูลทั้งหมดถูกบันทึกลง Supabase และจะอัปเดตบนหน้าเว็บจริงทันที</p>
+      </div>
+      <button onclick="closeAlertModal()" class="w-full py-3 bg-black text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-gray-800 transition">
+        ตกลง
+      </button>
+    </div>
+  </div>
+
   <script>
     // 🔗 ตั้งค่า Supabase Credentials (ปิดการจำ Session เพื่อให้หลุดออกจากระบบเมื่อกด F5 หรือปิดเบราว์เซอร์)
     const SUPABASE_URL = 'https://dvzzpuorytdvdawolken.supabase.co';
@@ -166,6 +182,32 @@
     let navMenuItems = [];
     let systemCards = [];
     let footerLinks = [];
+
+    // ฟังก์ชันเปิด-ปิด Custom Popup Modal
+    function showAlertModal(title, message, isSuccess = true) {
+      const modal = document.getElementById('custom-alert-modal');
+      const iconBg = document.getElementById('modal-icon-bg');
+      const icon = document.getElementById('modal-icon');
+      const titleEl = document.getElementById('modal-title');
+      const msgEl = document.getElementById('modal-message');
+
+      titleEl.innerText = title;
+      msgEl.innerText = message;
+
+      if (isSuccess) {
+        iconBg.className = 'w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto text-2xl font-black';
+        icon.innerText = '✓';
+      } else {
+        iconBg.className = 'w-16 h-16 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center mx-auto text-2xl font-black';
+        icon.innerText = '✕';
+      }
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeAlertModal() {
+      document.getElementById('custom-alert-modal').classList.add('hidden');
+    }
 
     async function checkAuth() {
       const { data: { session } } = await supabaseClient.auth.getSession();
@@ -370,9 +412,9 @@
         .upsert({ id: 1, content: updatedPayload });
 
       if (error) {
-        alert('เกิดข้อผิดพลาดในการบันทึก: ' + error.message);
+        showAlertModal('เกิดข้อผิดพลาด!', 'เกิดปัญหาในการบันทึกข้อมูล: ' + error.message, false);
       } else {
-        alert('✅ บันทึกข้อมูลลง Supabase สำเร็จ! หน้าเว็บหลักจะอัปเดตทันที');
+        showAlertModal('บันทึกสำเร็จ!', 'อัปเดตข้อมูลลง Supabase เรียบร้อยแล้ว หน้าเว็บหลักจะแสดงผลข้อมูลใหม่ทันที', true);
       }
     }
 
