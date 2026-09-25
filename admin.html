@@ -55,25 +55,17 @@
       </div>
     </div>
 
-    <!-- หัวข้อ 1: โลโก้ & Nav Links -->
+    <!-- หัวข้อ 1: ลิงก์เมนูบาร์ -->
     <div class="bg-white p-6 md:p-8 rounded-3xl card-shadow border border-gray-100 space-y-6">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
         <div class="flex items-center gap-2">
           <span class="px-3 py-1 bg-black text-white rounded-xl font-bold text-xs">หัวข้อ 1</span>
-          <h2 class="text-sm font-bold uppercase tracking-wider text-black">โลโก้ & ลิงก์เมนูบาร์</h2>
+          <h2 class="text-sm font-bold uppercase tracking-wider text-black">ลิงก์เมนูบาร์</h2>
         </div>
         <button onclick="addNavMenu()" class="px-4 py-2 bg-black text-white rounded-xl text-xs font-bold tracking-wider hover:bg-gray-800 transition">+ เพิ่มเมนูใหม่</button>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-[#F9F9F9] p-4 rounded-2xl border border-gray-200">
-        <div>
-          <label class="block text-xs font-bold uppercase text-gray-600 mb-1">🖼️ ลิงก์รูปโลโก้ (Logo URL / Drive Link)</label>
-          <input type="text" id="admin-logo-url" class="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-xs font-bold">
-        </div>
-        <div>
-          <label class="block text-xs font-bold uppercase text-gray-600 mb-1">ข้อความชื่อแบรนด์ (Brand Text)</label>
-          <input type="text" id="admin-logo-text" class="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-xs font-bold">
-        </div>
-      </div>
+      <input type="hidden" id="admin-logo-url">
+      <input type="hidden" id="admin-logo-text">
       <div id="admin-nav-menu-list" class="space-y-3 pt-2"></div>
     </div>
 
@@ -253,12 +245,12 @@
           <textarea id="admin-card-desc-${idx}" rows="2" class="w-full p-2 bg-white rounded-lg text-xs border" placeholder="คำอธิบาย">${card.desc}</textarea>
           <input type="text" id="admin-card-img-${idx}" value="${card.imageUrl || ''}" class="w-full p-2 bg-white rounded-lg text-xs border" placeholder="ลิงก์รูป (Drive/URL)">
           <input type="text" id="admin-card-icon-${idx}" value="${card.iconText || ''}" class="w-full p-2 bg-white rounded-lg text-xs border" placeholder="ข้อความแทนรูป">
-          <input type="text" id="admin-card-link-${idx}" value="${card.link}" class="w-full p-2 bg-white rounded-lg text-xs border" placeholder="ลิงก์ระบบ">
+          <input type="text" id="admin-card-link-${idx}" value="${card.link || ''}" class="w-full p-2 bg-white rounded-lg text-xs border" placeholder="ลิงก์ระบบ (เชื่อมต่อ URL อื่น)">
         </div>
       `).join('');
     }
 
-    function addNewCard() { systemCards.push({ title: "New System", desc: "", imageUrl: "", iconText: "SYS", link: "#" }); renderAdminCards(); }
+    function addNewCard() { systemCards.push({ title: "New System", desc: "", imageUrl: "", iconText: "SYS", link: "" }); renderAdminCards(); }
 
     function renderAdminFooterLinks() {
       document.getElementById('admin-footer-links-list').innerHTML = footerLinks.map((item, idx) => `
