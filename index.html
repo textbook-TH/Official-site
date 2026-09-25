@@ -91,6 +91,20 @@
       return url;
     }
 
+    // ฟังก์ชันจับคู่ไอคอนอัตโนมัติตามชื่อข้อความ
+    function getAutoIconSvg(label) {
+      const text = (label || '').toLowerCase();
+      if (text.includes('ติดตาม') || text.includes('สถานะ') || text.includes('track') || text.includes('status')) {
+        return `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+      } else if (text.includes('คำนวณ') || text.includes('ราคา') || text.includes('calc') || text.includes('price')) {
+        return `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>`;
+      } else if (text.includes('สืบค้น') || text.includes('ค้นหา') || text.includes('search')) {
+        return `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>`;
+      } else {
+        return `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>`;
+      }
+    }
+
     // ดึงข้อมูลจาก Supabase มาแสดงผลบนหน้าเว็บ
     async function loadDataFromSupabase() {
       const { data, error } = await supabaseClient
@@ -110,7 +124,10 @@
       if (c.logoUrl) document.getElementById('nav-logo-img').src = parseGoogleDriveUrl(c.logoUrl);
       document.getElementById('nav-logo-text').innerText = c.logoText || 'EDUCATION TECHNOLOGY';
       document.getElementById('nav-dynamic-links').innerHTML = (c.navMenuItems || []).map(item => 
-        `<a href="${item.url}" target="_blank" class="hover:text-black transition">${item.label}</a>`
+        `<a href="${item.url}" target="_blank" class="flex items-center gap-1.5 hover:text-black transition">
+          ${getAutoIconSvg(item.label)}
+          <span>${item.label}</span>
+        </a>`
       ).join('');
 
       // 2. Hero Section
