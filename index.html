@@ -126,7 +126,7 @@
 
       // 1. Header & Nav
       if (c.logoUrl) document.getElementById('nav-logo-img').src = parseGoogleDriveUrl(c.logoUrl);
-      document.getElementById('nav-logo-text').innerText = c.logoText || 'EDUCATION TECHNOLOGY';
+      document.getElementById('nav-logo-text').innerText = c.logoText || 'SCHOOL OF ENGINEERING';
       document.getElementById('nav-dynamic-links').innerHTML = (c.navMenuItems || []).map(item => 
         `<a href="${item.url}" target="_blank" class="flex items-center gap-1.5 hover:text-black transition">
           ${getAutoIconSvg(item.label)}
