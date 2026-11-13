@@ -99,7 +99,8 @@
       if (cleanUrl.includes('drive.google.com') || cleanUrl.includes('docs.google.com')) {
         const fileId = extractGoogleDriveId(cleanUrl);
         if (fileId) {
-          return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200`;
+          // ใช้ Googleusercontent CDN โดยตรงเพื่อให้ iOS / iPadOS Safari โหลดได้โดยไม่ติด ITP Redirect Block
+          return `https://lh3.googleusercontent.com/d/${fileId}=s1200`;
         }
       }
       return cleanUrl;
@@ -113,10 +114,11 @@
       const step = parseInt(imgElement.dataset.fallbackStep || '0', 10);
       if (step === 0) {
         imgElement.dataset.fallbackStep = '1';
-        imgElement.src = `https://lh3.googleusercontent.com/d/${fileId}=w1200`;
+        imgElement.src = `https://lh3.googleusercontent.com/d/${fileId}`;
       } else if (step === 1) {
         imgElement.dataset.fallbackStep = '2';
-        imgElement.src = `https://drive.google.com/uc?export=view&id=${fileId}`;
+        // Proxy สำรองกรณี iOS Safari บล็อก Google Drive Cookie
+        imgElement.src = `https://wsrv.nl/?url=${encodeURIComponent('https://drive.google.com/uc?export=view&id=' + fileId)}`;
       }
     }
 
