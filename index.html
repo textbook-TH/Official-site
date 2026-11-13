@@ -50,8 +50,8 @@
       <!-- ABOUT SECTION -->
       <section class="px-6 md:px-16 max-w-5xl mx-auto pt-8 pb-4 border-t border-gray-200/60">
         <div class="text-center mb-6">
-          <h2 id="about-title" class="text-xl md:text-2xl font-black uppercase tracking-wider text-black"></h2>
-          <p id="about-subtitle" class="text-[11px] tracking-widest text-gray-400 uppercase mt-0.5 font-semibold"></p>
+          <h2 id="about-title" class="text-xl md:text-2xl font-black tracking-wider text-black"></h2>
+          <p id="about-subtitle" class="text-[11px] tracking-widest text-gray-400 mt-0.5 font-semibold"></p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 text-xs text-gray-600 leading-relaxed font-normal">
           <p id="about-text-1"></p>
@@ -62,8 +62,8 @@
       <!-- SYSTEM COLLECTION -->
       <section class="px-6 md:px-12 max-w-6xl mx-auto pt-4 pb-6">
         <div class="text-center mb-8 border-b border-gray-200/60 pb-6">
-          <h2 id="system-title" class="text-xl md:text-2xl font-black uppercase tracking-tight text-black"></h2>
-          <p id="system-subtitle" class="text-[11px] font-semibold text-gray-400 tracking-widest uppercase mt-1"></p>
+          <h2 id="system-title" class="text-xl md:text-2xl font-black tracking-tight text-black"></h2>
+          <p id="system-subtitle" class="text-[11px] font-semibold text-gray-400 tracking-widest mt-1"></p>
         </div>
         <div id="cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
       </section>
@@ -95,18 +95,9 @@
       return url;
     }
 
-    // ฟังก์ชันจับคู่ไอคอนอัตโนมัติตามชื่อข้อความ
+    // ฟังก์ชันจับคู่ไอคอน (แสดงไอคอนเครื่องหมายถูกในวงกลมเหมือนกันทุกเมนู)
     function getAutoIconSvg(label) {
-      const text = (label || '').toLowerCase();
-      if (text.includes('ติดตาม') || text.includes('สถานะ') || text.includes('track') || text.includes('status')) {
-        return `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
-      } else if (text.includes('คำนวณ') || text.includes('ราคา') || text.includes('calc') || text.includes('price')) {
-        return `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>`;
-      } else if (text.includes('สืบค้น') || text.includes('ค้นหา') || text.includes('search')) {
-        return `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>`;
-      } else {
-        return `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>`;
-      }
+      return `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
     }
 
     // ดึงข้อมูลจาก Supabase มาแสดงผลบนหน้าเว็บ
@@ -159,7 +150,7 @@
         return `
           <div class="bg-white rounded-[28px] p-6 flex flex-col justify-between card-shadow border border-gray-100 group hover:-translate-y-1.5 transition duration-300">
             <div>
-              <h3 class="text-xl font-bold uppercase tracking-tight text-black mt-1">${card.title}</h3>
+              <h3 class="text-xl font-bold tracking-tight text-black mt-1">${card.title}</h3>
               <p class="text-xs text-gray-500 mt-1.5 leading-snug line-clamp-2">${card.desc}</p>
             </div>
             <div class="my-4 flex justify-center items-center h-48 md:h-52 bg-[#F9F9F9] overflow-hidden border border-gray-100 relative">
