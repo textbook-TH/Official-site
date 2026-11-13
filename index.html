@@ -20,7 +20,7 @@
     <!-- Navigation Bar (ซ่อนข้อความและโลโก้ใน iPad ทั้งแนวตั้งและแนวนอน แสดงเฉพาะ xl ขึ้นไป) -->
     <nav class="px-6 md:px-10 py-6 flex items-center justify-center xl:justify-between border-b border-gray-200/50">
       <div id="nav-logo" class="hidden xl:flex items-center gap-3 w-auto justify-start">
-        <img id="nav-logo-img" src="logo-A.png" alt="Logo" class="w-8 h-8 md:w-9 md:h-9 object-cover rounded-full"/>
+        <img id="nav-logo-img" src="logo-A.png" alt="Logo" referrerpolicy="no-referrer" class="w-8 h-8 md:w-9 md:h-9 object-cover rounded-full"/>
         <span id="nav-logo-text" class="font-black text-lg md:text-xl tracking-wider text-black">School of Engineering</span>
       </div>
       
@@ -39,7 +39,7 @@
         </div>
         <p id="hero-subtext" class="text-[10px] md:text-[11px] uppercase tracking-[0.35em] font-bold text-gray-400 text-center my-3 md:my-2"></p>
         <div class="relative w-full max-w-xl mx-auto z-10 my-2">
-          <img id="hero-img" src="" alt="Hero" class="w-56 h-56 md:w-[360px] md:h-[360px] object-cover mx-auto rounded-full shadow-2xl border-4 border-white/90"/>
+          <img id="hero-img" src="" alt="Hero" referrerpolicy="no-referrer" class="w-56 h-56 md:w-[360px] md:h-[360px] object-cover mx-auto rounded-full shadow-2xl border-4 border-white/90"/>
         </div>
         <div class="w-full text-center mt-6 z-10 px-4 space-y-2 overflow-x-auto">
           <p id="hero-bottom-title" class="text-xs font-bold uppercase tracking-[0.25em] text-gray-800"></p>
@@ -86,13 +86,38 @@
     const SUPABASE_ANON_KEY = 'sb_publishable_TK-m_pMcUSnq9h2Lf1T3bQ_bUrSpd4H';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+    function extractGoogleDriveId(url) {
+      if (!url) return null;
+      const cleanUrl = url.trim();
+      const matches = cleanUrl.match(/\/d\/([a-zA-Z0-9_-]+)/) || cleanUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      return (matches && matches[1]) ? matches[1] : null;
+    }
+
     function parseGoogleDriveUrl(url) {
       if (!url) return '';
-      if (url.includes('drive.google.com')) {
-        const matches = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
-        if (matches && matches[1]) return `https://lh3.googleusercontent.com/d/${matches[1]}`;
+      const cleanUrl = url.trim();
+      if (cleanUrl.includes('drive.google.com') || cleanUrl.includes('docs.google.com')) {
+        const fileId = extractGoogleDriveId(cleanUrl);
+        if (fileId) {
+          return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200`;
+        }
       }
-      return url;
+      return cleanUrl;
+    }
+
+    function handleDriveImgFallback(imgElement, originalUrl) {
+      if (!originalUrl) return;
+      const fileId = extractGoogleDriveId(originalUrl);
+      if (!fileId) return;
+
+      const step = parseInt(imgElement.dataset.fallbackStep || '0', 10);
+      if (step === 0) {
+        imgElement.dataset.fallbackStep = '1';
+        imgElement.src = `https://lh3.googleusercontent.com/d/${fileId}=w1200`;
+      } else if (step === 1) {
+        imgElement.dataset.fallbackStep = '2';
+        imgElement.src = `https://drive.google.com/uc?export=view&id=${fileId}`;
+      }
     }
 
     // ฟังก์ชันจับคู่ไอคอน (แสดงไอคอนเครื่องหมายถูกในวงกลมเหมือนกันทุกเมนู)
@@ -116,7 +141,11 @@
       const c = data.content;
 
       // 1. Header & Nav
-      if (c.logoUrl) document.getElementById('nav-logo-img').src = parseGoogleDriveUrl(c.logoUrl);
+      if (c.logoUrl) {
+        const navLogoImg = document.getElementById('nav-logo-img');
+        navLogoImg.onerror = () => handleDriveImgFallback(navLogoImg, c.logoUrl);
+        navLogoImg.src = parseGoogleDriveUrl(c.logoUrl);
+      }
       document.getElementById('nav-logo-text').innerText = c.logoText || 'School of Engineering';
       document.getElementById('nav-dynamic-links').innerHTML = (c.navMenuItems || []).map(item => 
         `<a href="${item.url}" target="_blank" class="flex items-center gap-1.5 hover:text-black transition">
@@ -130,7 +159,11 @@
       document.getElementById('hero-subtext').innerText = c.heroSubtext || '';
       document.getElementById('hero-bottom-title').innerText = c.heroBottomTitle || '';
       document.getElementById('hero-desc-left').innerText = c.heroDescLeft || '';
-      if (c.heroImgUrl) document.getElementById('hero-img').src = parseGoogleDriveUrl(c.heroImgUrl);
+      if (c.heroImgUrl) {
+        const heroImg = document.getElementById('hero-img');
+        heroImg.onerror = () => handleDriveImgFallback(heroImg, c.heroImgUrl);
+        heroImg.src = parseGoogleDriveUrl(c.heroImgUrl);
+      }
 
       // 3. About Section
       document.getElementById('about-title').innerText = c.aboutTitle || '';
@@ -143,8 +176,9 @@
       document.getElementById('system-subtitle').innerText = c.systemSubtitle || '';
       document.getElementById('cards-container').innerHTML = (c.systemCards || []).map(card => {
         const parsedImg = parseGoogleDriveUrl(card.imageUrl);
+        const safeOriginalUrl = (card.imageUrl || '').replace(/'/g, "\\'");
         const imageContent = parsedImg 
-          ? `<img src="${parsedImg}" alt="${card.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500"/>`
+          ? `<img src="${parsedImg}" alt="${card.title}" referrerpolicy="no-referrer" onerror="handleDriveImgFallback(this, '${safeOriginalUrl}')" class="w-full h-full object-cover group-hover:scale-105 transition duration-500"/>`
           : `<span class="text-xl md:text-2xl font-black tracking-widest ${card.iconColor}">${card.iconText || 'SYSTEM'}</span>`;
 
         return `
